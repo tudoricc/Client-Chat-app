@@ -97,9 +97,28 @@ class ViewController2: UIViewController,NSStreamDelegate {
         var ceva = msg
            // text = split.objectAtIndex(1) as NSString
        // var ceva = String()
-        
-        message[pos] = msg;
-        pos++
+        if msg.containsString("Users"){
+            //mie prima si prima data imi vine o lista de utilizatori si am zis sa o modific aici ca sa nu am nici-o surpriza.
+            //fac vectorul frumos si il urc mai sus
+            ceva = "ALTA BUCURIE"
+            
+            var smth = msg.componentsSeparatedByString(":")
+            var word = ""
+            for i in (1..<smth.count){
+                var hey = smth[i] as NSString
+                var elst = ""
+                elst += hey as NSString
+                var word2 : NSString
+                //word2 += elst + " "
+            
+                message[pos] = smth[i];
+                pos++
+            }
+        }
+        else{
+            message[pos] = ceva;
+            pos++
+        }
     
     }
     func initNetworkCommunication() {
@@ -120,8 +139,8 @@ class ViewController2: UIViewController,NSStreamDelegate {
         self.inputStream!.scheduleInRunLoop(NSRunLoop.currentRunLoop(), forMode: NSDefaultRunLoopMode)
         self.outputStrean!.scheduleInRunLoop(NSRunLoop.currentRunLoop(), forMode: NSDefaultRunLoopMode)
         
-//        self.inputStream.open()
-//        self.outputStrean.open()
+        self.inputStream.open()
+        self.outputStrean.open()
         
         
         
@@ -141,6 +160,19 @@ class ViewController2: UIViewController,NSStreamDelegate {
         word=message[indexPath.row] as NSString
         if word.containsString("You just sent a message"){
             cell.textLabel.text = word.componentsSeparatedByString("\n")[1].componentsSeparatedByString(":")[6] as NSString}
+        if word.containsString("Users"){
+            //chestia asta iti ia lista de utilizatori  si o afiseaza
+            var smth = word.componentsSeparatedByString(":")
+            var word = ""
+            for i in (1..<smth.count){
+                var hey = smth[i] as NSString
+                var elst = ""
+                elst += hey as NSString
+                word += elst + " "
+                
+            }
+            cell.textLabel.text = word
+        }
         else
         {
             cell.textLabel.text = word
@@ -160,10 +192,10 @@ class ViewController2: UIViewController,NSStreamDelegate {
     @IBAction func sendMessage(sender:UIButton){
     
         var message = textView.text
-        var response = "msgtouser:"+self.name+":ion:" + message
-        var data = response.nulTerminatedUTF8
+        var response = "users:ion\r\n"
+    
         var res : Int
-        outputStrean.write(response, maxLength: data.count)
+        outputStrean.write(response, maxLength: response.lengthOfBytesUsingEncoding(NSASCIIStringEncoding))
         
         
         println("\(response)")
