@@ -11,7 +11,7 @@ import UIKit
 class ViewController2: UIViewController,NSStreamDelegate {
 
  
-    @IBOutlet var tableView: UITableView?
+    @IBOutlet var tableView: UITableView!
     @IBOutlet var textView: UITextField!
     var myData=["mere","pere","alune"]
     var inputStream : NSInputStream!
@@ -22,6 +22,7 @@ class ViewController2: UIViewController,NSStreamDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         self.initNetworkCommunication()
         // Do any additional setupnumberOfRowsInSectionew.
     }
@@ -161,7 +162,6 @@ class ViewController2: UIViewController,NSStreamDelegate {
         if word.containsString("You just sent a message"){
             cell.textLabel.text = word.componentsSeparatedByString("\n")[1].componentsSeparatedByString(":")[6] as NSString}
         if word.containsString("Users"){
-            //chestia asta iti ia lista de utilizatori  si o afiseaza
             var smth = word.componentsSeparatedByString(":")
             var word = ""
             for i in (1..<smth.count){
@@ -180,14 +180,17 @@ class ViewController2: UIViewController,NSStreamDelegate {
             return cell
         
     }
-    
-    func numberOfSectionsInTableView (tableView:UITableView)->Int{
-        return 1
-    }
+    func tableView(tableView: UITableView!, didSelectRowAtIndexPath indexPath: NSIndexPath!) {
+        println("You selected cell #\(indexPath.row)!")
+        let vc = self.storyboard.instantiateViewControllerWithIdentifier("ChatView")
+        self.presentViewController(vc as UIViewController, animated: true, completion: nil)
+        }
     
     func tableView(tableView:UITableView ,numberOfRowsInSection section :NSInteger)->Int{
         return message.count
     }
+    
+    
     
     @IBAction func sendMessage(sender:UIButton){
     

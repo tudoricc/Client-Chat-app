@@ -71,6 +71,8 @@
                             </mask>
                         </variation>
                     </view>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <size key="freeformSize" width="300" height="400"/>
                     <connections>
                         <outlet property="JoinButton" destination="SQp-vx-hQG" id="SHL-pX-4ZL"/>
                         <outlet property="UsernameField" destination="Wlv-7h-PKW" id="EoI-JB-ohy"/>
@@ -123,6 +125,18 @@
                                             <action selector="sendMessage:" destination="PMB-qP-rEB" eventType="touchUpInside" id="0QO-d1-fw3"/>
                                         </connections>
                                     </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="F9T-EV-jBC">
+                                        <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                                        <state key="normal" title="Button">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <variation key="widthClass=compact" fixedFrame="YES">
+                                            <rect key="frame" x="234" y="9" width="46" height="30"/>
+                                        </variation>
+                                        <connections>
+                                            <segue destination="GR1-H3-f0I" kind="show" id="OD4-UP-D3v"/>
+                                        </connections>
+                                    </button>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="RxC-du-fUM">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -140,17 +154,9 @@
                                         </variation>
                                         <connections>
                                             <outlet property="dataSource" destination="PMB-qP-rEB" id="qMF-WO-cnz"/>
+                                            <outlet property="delegate" destination="PMB-qP-rEB" id="OEF-da-Isu"/>
                                         </connections>
                                     </tableView>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="F9T-EV-jBC">
-                                        <rect key="frame" x="-23" y="-15" width="46" height="30"/>
-                                        <state key="normal" title="Button">
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <variation key="widthClass=compact" fixedFrame="YES">
-                                            <rect key="frame" x="274" y="10" width="46" height="30"/>
-                                        </variation>
-                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
@@ -170,8 +176,8 @@
                                     <mask key="subviews">
                                         <exclude reference="QHh-wh-Mn4"/>
                                         <exclude reference="y4m-sA-3ci"/>
-                                        <exclude reference="RxC-du-fUM"/>
                                         <exclude reference="F9T-EV-jBC"/>
+                                        <exclude reference="RxC-du-fUM"/>
                                     </mask>
                                     <mask key="constraints">
                                         <exclude reference="S3s-lh-XQ2"/>
@@ -191,8 +197,8 @@
                                     <mask key="subviews">
                                         <include reference="QHh-wh-Mn4"/>
                                         <include reference="y4m-sA-3ci"/>
-                                        <include reference="RxC-du-fUM"/>
                                         <include reference="F9T-EV-jBC"/>
+                                        <include reference="RxC-du-fUM"/>
                                     </mask>
                                     <mask key="constraints">
                                         <include reference="S3s-lh-XQ2"/>
@@ -240,6 +246,8 @@
                             </mask>
                         </variation>
                     </view>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <size key="freeformSize" width="300" height="400"/>
                     <connections>
                         <outlet property="tableView" destination="RxC-du-fUM" id="NcR-cQ-6QW"/>
                         <outlet property="textView" destination="QHh-wh-Mn4" id="69j-nK-glC"/>
@@ -248,6 +256,44 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="UyG-CZ-DlM" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1021.5" y="419"/>
+        </scene>
+        <!--Chat View-->
+        <scene sceneID="lCD-LQ-54y">
+            <objects>
+                <viewController storyboardIdentifier="ChatView" id="GR1-H3-f0I" customClass="ChatView" customModule="ChatClien" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Gqw-C3-wsp"/>
+                        <viewControllerLayoutGuide type="bottom" id="Vj8-4T-o4f"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="CJy-f7-gvD">
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HXe-RA-ZMG" colorLabel="IBBuiltInLabel-Red">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <color key="backgroundColor" red="1" green="0.5" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <variation key="widthClass=compact" fixedFrame="YES">
+                                    <rect key="frame" x="0.0" y="0.0" width="400" height="600"/>
+                                </variation>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <variation key="default">
+                            <mask key="subviews">
+                                <exclude reference="HXe-RA-ZMG"/>
+                            </mask>
+                        </variation>
+                        <variation key="widthClass=compact">
+                            <mask key="subviews">
+                                <include reference="HXe-RA-ZMG"/>
+                            </mask>
+                        </variation>
+                    </view>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <size key="freeformSize" width="400" height="600"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Bmi-Gu-LoE" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1695" y="419"/>
         </scene>
     </scenes>
 </document>
