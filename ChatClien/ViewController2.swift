@@ -19,10 +19,10 @@ class ViewController2: UIViewController,NSStreamDelegate {
     var message : NSMutableArray = [" "]
     var pos = 0
     var name = String()
-    
+    var nameofreceiver : NSString!
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+       
         self.initNetworkCommunication()
         // Do any additional setupnumberOfRowsInSectionew.
     }
@@ -143,7 +143,12 @@ class ViewController2: UIViewController,NSStreamDelegate {
         self.inputStream.open()
         self.outputStrean.open()
         
-        
+        //println("\(UsernameField.text)");
+        var msg = "iam:" + self.name+".secView"+"\r\n"
+        //println("\(msg)")
+        var ptr = msg.nulTerminatedUTF8
+        var res = outputStrean.write(msg, maxLength:msg.lengthOfBytesUsingEncoding(NSASCIIStringEncoding))
+        message[0]=""
         
     }
     func tableView (tableView:UITableView , cellForRowAtIndexPath indexPath : NSIndexPath)->UITableViewCell{
@@ -166,12 +171,19 @@ class ViewController2: UIViewController,NSStreamDelegate {
             var word = ""
             for i in (1..<smth.count){
                 var hey = smth[i] as NSString
-                var elst = ""
-                elst += hey as NSString
-                word += elst + " "
-                
+                print("\(self.name) is ma name")
+                if hey != "\(self.name)" || hey != "\(self.name).secView" {
+                    
+                    var elst = ""
+                    elst += hey as NSString
+                    word += elst + " "
+                    cell.textLabel.text = word
+                }
             }
-            cell.textLabel.text = word
+            
+        }
+        if word.containsString("has joined"){
+            return cell
         }
         else
         {
@@ -182,8 +194,22 @@ class ViewController2: UIViewController,NSStreamDelegate {
     }
     func tableView(tableView: UITableView!, didSelectRowAtIndexPath indexPath: NSIndexPath!) {
         println("You selected cell #\(indexPath.row)!")
-        let vc = self.storyboard.instantiateViewControllerWithIdentifier("ChatView")
-        self.presentViewController(vc as UIViewController, animated: true, completion: nil)
+        let vc: AnyObject! = self.storyboard.instantiateViewControllerWithIdentifier("ChatView")
+        
+        nameofreceiver = self.message[indexPath.row] as NSString
+        var ChatView :ViewController3
+        ChatView = self.storyboard.instantiateViewControllerWithIdentifier("ChatView") as ViewController3
+        ChatView.nameofSender = self.name
+        
+        ChatView.nameofReceiver = self.message[indexPath.row] as NSString
+        
+        
+        self.presentViewController(ChatView, animated: true, completion:nil)
+        
+        //daca pica ai grija ca se poate sa fie aici
+        
+        self.inputStream.close()
+        self.outputStrean.close()
         }
     
     func tableView(tableView:UITableView ,numberOfRowsInSection section :NSInteger)->Int{
@@ -193,14 +219,17 @@ class ViewController2: UIViewController,NSStreamDelegate {
     
     
     @IBAction func sendMessage(sender:UIButton){
-    
+        
+        
+        //Eu zic sa nu mai facem o actiune sa facem intruna asta.
+        //TODO sa nu mai apasam intruna pe acest buton sa faca la fiecare afisare
         var message = textView.text
         var response = "users:ion\r\n"
     
         var res : Int
         outputStrean.write(response, maxLength: response.lengthOfBytesUsingEncoding(NSASCIIStringEncoding))
         
-        
-        println("\(response)")
+       
+        //println("\(response)")
     }
 }

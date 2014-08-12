@@ -13,16 +13,20 @@ class ViewController: UIViewController,NSStreamDelegate{
                             
     @IBOutlet var JoinButton: UIButton!
     @IBOutlet var UsernameField: UITextField!
-    var inputStream : NSInputStream!
-    var outputStrean : NSOutputStream!
+    public var inputStream : NSInputStream!
+    public var outputStrean : NSOutputStream!
     var name: String!
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         self.initNetworkCommunication()
         name=UsernameField.text
+        
+        
+        
+        
     }
-   
+
     
     func initNetworkCommunication() {
         
@@ -43,7 +47,7 @@ class ViewController: UIViewController,NSStreamDelegate{
         
         self.inputStream.open()
         self.outputStrean.open()
-        
+                
  
         
     }
@@ -64,6 +68,12 @@ class ViewController: UIViewController,NSStreamDelegate{
         FirstView.name = UsernameField.text
         FirstView.inputStream = self.inputStream
         FirstView.outputStrean = self.outputStrean
+        
+        var ChatView :ViewController3
+        ChatView = self.storyboard.instantiateViewControllerWithIdentifier("ChatView") as ViewController3
+        ChatView.inputStream = self.inputStream
+        ChatView.outputStream = self.outputStrean
+        
         self.presentViewController(FirstView, animated: true, completion:nil)
         var response : NSString!
         var actualResponse : NSData!
@@ -76,11 +86,11 @@ class ViewController: UIViewController,NSStreamDelegate{
         var length : UInt8
 
         var res:Int
-        println("\(UsernameField.text)");
-        var msg = "iam:" + UsernameField.text+"\n"
-        println("\(msg)")
+        //println("\(UsernameField.text)");
+        var msg = "iam:" + UsernameField.text+"\r\n"
+        //println("\(msg)")
         var ptr = msg.nulTerminatedUTF8
-        res = outputStrean.write(msg, maxLength:10)
+        res = outputStrean.write(msg, maxLength:msg.lengthOfBytesUsingEncoding(NSASCIIStringEncoding))
         
         self.viewWillDisappear(true)
       //  ViewController2.viewWillAppear(UIViewController)
@@ -90,7 +100,20 @@ class ViewController: UIViewController,NSStreamDelegate{
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
+    override func prepareForSegue(segue: UIStoryboardSegue!, sender: AnyObject!) {
+        
+        if (segue.identifier.compare("nextOne") == 0 ) {
+            var intro =  "Ceva"
+            var view2 :ViewController2 = segue.destinationViewController as ViewController2
+            view2.outputStrean = self.outputStrean
+            view2.inputStream = self.inputStream
+            println("Aasdasd")
+        
+        
+        }
+        
+        
+    }
 
 }
 
