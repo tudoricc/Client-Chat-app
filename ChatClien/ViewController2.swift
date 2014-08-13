@@ -33,6 +33,8 @@ class ViewController2: UIViewController,NSStreamDelegate {
 
         self.initNetworkCommunication()
         var message = textView.text
+        var msg = "users:\(self.name).secView\r\n"
+        var res = outputStrean.write(msg, maxLength:msg.lengthOfBytesUsingEncoding(NSASCIIStringEncoding))
         
                 // Do any additional setupnumberOfRowsInSectionew.
     }
@@ -178,11 +180,7 @@ class ViewController2: UIViewController,NSStreamDelegate {
         //println("\(msg)")
         var ptr = msg.nulTerminatedUTF8
         var res = outputStrean.write(msg, maxLength:msg.lengthOfBytesUsingEncoding(NSASCIIStringEncoding))
-        var response = "users:\(self.name)\r\n"
         
-        //var res : Int
-        outputStrean.write(response, maxLength: response.lengthOfBytesUsingEncoding(NSASCIIStringEncoding))
-
        
         
     }

@@ -51,6 +51,7 @@ class ViewController3: UIViewController , UITextViewDelegate , NSStreamDelegate{
         
         self.initNetworkCommunication()
         
+        
     }
 
     
@@ -325,7 +326,12 @@ class ViewController3: UIViewController , UITextViewDelegate , NSStreamDelegate{
  
         
         UsersView = self.storyboard.instantiateViewControllerWithIdentifier("SecondView") as ViewController2
+        UsersView.name = self.nameofSender
+        self.inputStream.close()
+        self.outputStream.close()
         
+        self.viewWillDisappear(true)
+           self.presentViewController(UsersView, animated: true, completion:nil)
         //self.presentViewController(UsersView, animated: true, completion:nil)
         
 
@@ -346,6 +352,13 @@ class ViewController3: UIViewController , UITextViewDelegate , NSStreamDelegate{
         self.outputStream.write(response, maxLength :response.lengthOfBytesUsingEncoding(NSASCIIStringEncoding))
         
         self.messageText.text = ""
+        var UsersView    : ViewController2
+        
+        
+        UsersView = self.storyboard.instantiateViewControllerWithIdentifier("SecondView") as ViewController2
+        UsersView.name = uname
+        
+
     }
     
     

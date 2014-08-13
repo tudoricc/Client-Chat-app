@@ -313,7 +313,6 @@
                                 </variation>
                                 <connections>
                                     <action selector="goBack:" destination="GR1-H3-f0I" eventType="touchUpInside" id="rPl-ps-Qjr"/>
-                                    <segue destination="PMB-qP-rEB" kind="show" id="n1Z-kZ-UUN"/>
                                 </connections>
                             </button>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Uv5-Gd-HrG">
@@ -664,7 +663,4 @@
             <point key="canvasLocation" x="1294.5" y="270"/>
         </scene>
     </scenes>
-    <inferredMetricsTieBreakers>
-        <segue reference="n1Z-kZ-UUN"/>
-    </inferredMetricsTieBreakers>
 </document>
