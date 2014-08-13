@@ -13,18 +13,28 @@ class ViewController2: UIViewController,NSStreamDelegate {
  
     @IBOutlet var tableView: UITableView!
     @IBOutlet var textView: UITextField!
+    
+    
     var myData=["mere","pere","alune"]
     var inputStream : NSInputStream!
     var outputStrean : NSOutputStream!
     var message : NSMutableArray = [" "]
     var pos = 0
+    var myname : NSString!
     var name = String()
     var nameofreceiver : NSString!
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-       
+//        f.autocorrectionType = UITextAutocorrectionTypeNo
+        
+
         self.initNetworkCommunication()
-        // Do any additional setupnumberOfRowsInSectionew.
+        var message = textView.text
+        
+                // Do any additional setupnumberOfRowsInSectionew.
     }
 
     override func didReceiveMemoryWarning() {
@@ -56,7 +66,7 @@ class ViewController2: UIViewController,NSStreamDelegate {
                 var len : Int
                 var buffer : UnsafePointer<uint_fast8_t>!
                 while (inputStream.hasBytesAvailable){
-                    let buffer2=UnsafePointer<UInt8>.alloc(120);
+                    let buffer2=UnsafeMutablePointer<UInt8>.alloc(120);
                     len = inputStream.read(buffer2, maxLength: 120)
                     if(len>0){
                         var output = NSString(bytes: buffer2, length: len, encoding: NSASCIIStringEncoding)
@@ -68,10 +78,10 @@ class ViewController2: UIViewController,NSStreamDelegate {
                             
                         }
                         else{
-                            println("Server said : \(output)")
+                           // println("Server said : \(output)")
                             self.messageReceived(output)
                             
-                            println(" \(message)  ")
+                            //println(" \(message)  ")
                             tableView?.reloadData()
                             
                         }
@@ -101,7 +111,7 @@ class ViewController2: UIViewController,NSStreamDelegate {
         if msg.containsString("Users"){
             //mie prima si prima data imi vine o lista de utilizatori si am zis sa o modific aici ca sa nu am nici-o surpriza.
             //fac vectorul frumos si il urc mai sus
-            ceva = "ALTA BUCURIE"
+            ceva = " "
             
             var smth = msg.componentsSeparatedByString(":")
             var word = ""
@@ -111,10 +121,28 @@ class ViewController2: UIViewController,NSStreamDelegate {
                 elst += hey as NSString
                 var word2 : NSString
                 //word2 += elst + " "
-            
-                message[pos] = smth[i];
-                pos++
+               // if smth[i] as NSString == self.name || smth[i].containsString(".secView") || smth[i].containsString(".thirdView") {
+                    
+                //}
+                if hey.containsString("\(self.name)"){
+                    
+                }
+                else if hey.containsString("\(self.name).secView"){
+                    
+                }
+                else if hey.containsString("\(self.name).thirdView"){
+                    
+                }
+                else{
+                    message[pos] = smth[i];
+                    pos++
+                }
             }
+            
+        }
+        //pos = 0
+        if msg.containsString("has joined"){
+            
         }
         else{
             message[pos] = ceva;
@@ -144,11 +172,18 @@ class ViewController2: UIViewController,NSStreamDelegate {
         self.outputStrean.open()
         
         //println("\(UsernameField.text)");
-        var msg = "iam:" + self.name+".secView"+"\r\n"
+        var msg = "iam:\(self.name).secView\r\n"
+        
+        self.myname = msg.componentsSeparatedByString(":")[1] as NSString
         //println("\(msg)")
         var ptr = msg.nulTerminatedUTF8
         var res = outputStrean.write(msg, maxLength:msg.lengthOfBytesUsingEncoding(NSASCIIStringEncoding))
-        message[0]=""
+        var response = "users:\(self.name)\r\n"
+        
+        //var res : Int
+        outputStrean.write(response, maxLength: response.lengthOfBytesUsingEncoding(NSASCIIStringEncoding))
+
+       
         
     }
     func tableView (tableView:UITableView , cellForRowAtIndexPath indexPath : NSIndexPath)->UITableViewCell{
@@ -171,19 +206,22 @@ class ViewController2: UIViewController,NSStreamDelegate {
             var word = ""
             for i in (1..<smth.count){
                 var hey = smth[i] as NSString
-                print("\(self.name) is ma name")
-                if hey != "\(self.name)" || hey != "\(self.name).secView" {
+                //print("\(self.name) is ma name")
+                var unu = "\(self.name)"
+                var doi = self.name
+                doi += ".secView"
+                var trei  = self.name
+                trei += ".thirdView"
+                //if hey != unu   || hey != doi || hey != trei {
                     
-                    var elst = ""
-                    elst += hey as NSString
-                    word += elst + " "
+                    word += hey as NSString
                     cell.textLabel.text = word
-                }
+                //}
             }
             
         }
         if word.containsString("has joined"){
-            return cell
+
         }
         else
         {
@@ -193,7 +231,7 @@ class ViewController2: UIViewController,NSStreamDelegate {
         
     }
     func tableView(tableView: UITableView!, didSelectRowAtIndexPath indexPath: NSIndexPath!) {
-        println("You selected cell #\(indexPath.row)!")
+        //println("You selected cell #\(indexPath.row)!")
         let vc: AnyObject! = self.storyboard.instantiateViewControllerWithIdentifier("ChatView")
         
         nameofreceiver = self.message[indexPath.row] as NSString
@@ -224,9 +262,9 @@ class ViewController2: UIViewController,NSStreamDelegate {
         //Eu zic sa nu mai facem o actiune sa facem intruna asta.
         //TODO sa nu mai apasam intruna pe acest buton sa faca la fiecare afisare
         var message = textView.text
-        var response = "users:ion\r\n"
+        var response = "users:\(self.name)\r\n"
     
-        var res : Int
+        //var res : Int
         outputStrean.write(response, maxLength: response.lengthOfBytesUsingEncoding(NSASCIIStringEncoding))
         
        

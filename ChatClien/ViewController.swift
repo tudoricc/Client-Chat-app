@@ -13,17 +13,21 @@ class ViewController: UIViewController,NSStreamDelegate{
                             
     @IBOutlet var JoinButton: UIButton!
     @IBOutlet var UsernameField: UITextField!
-    public var inputStream : NSInputStream!
-    public var outputStrean : NSOutputStream!
+    internal var inputStream : NSInputStream!
+    internal var outputStrean : NSOutputStream!
     var name: String!
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         self.initNetworkCommunication()
         name=UsernameField.text
         
-        
-        
+        //        f.autocorrectionType = UITextAutocorrectionTypeNo
+
+      //  self.UsernameField.autocapitalizationType = false
         
     }
 
@@ -77,7 +81,7 @@ class ViewController: UIViewController,NSStreamDelegate{
         self.presentViewController(FirstView, animated: true, completion:nil)
         var response : NSString!
         var actualResponse : NSData!
-        response = "iam:" + UsernameField.text
+        response = "iam:\(UsernameField.text)"
         
         //daca iti pica functia asta inseamna ca e de   aici
         actualResponse = response.dataUsingEncoding(NSASCIIStringEncoding)
@@ -87,7 +91,7 @@ class ViewController: UIViewController,NSStreamDelegate{
 
         var res:Int
         //println("\(UsernameField.text)");
-        var msg = "iam:" + UsernameField.text+"\r\n"
+        var msg = "iam:\(UsernameField.text)\r\n"
         //println("\(msg)")
         var ptr = msg.nulTerminatedUTF8
         res = outputStrean.write(msg, maxLength:msg.lengthOfBytesUsingEncoding(NSASCIIStringEncoding))
@@ -100,20 +104,10 @@ class ViewController: UIViewController,NSStreamDelegate{
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    override func prepareForSegue(segue: UIStoryboardSegue!, sender: AnyObject!) {
-        
-        if (segue.identifier.compare("nextOne") == 0 ) {
-            var intro =  "Ceva"
-            var view2 :ViewController2 = segue.destinationViewController as ViewController2
-            view2.outputStrean = self.outputStrean
-            view2.inputStream = self.inputStream
-            println("Aasdasd")
+  
         
         
-        }
-        
-        
-    }
+    
 
 }
 

@@ -55,7 +55,7 @@ class ViewController3: UIViewController , UITextViewDelegate , NSStreamDelegate{
 
     
     func keyboardDidShow(notification :NSNotification){
-        println("A aparut")
+        //println("A aparut")
         print("\(self.messageText.frame.origin)")
         var c = notification.userInfo
         
@@ -64,10 +64,11 @@ class ViewController3: UIViewController , UITextViewDelegate , NSStreamDelegate{
         
         
         UIView.setAnimationDuration(0.25);
-        print(" is the height \(self.messageText.frame.height)")
+        //print(" is the height \(self.messageText.frame.height)")
         ChatView.frame = CGRectMake(ChatView.frame.origin.x, 60, ChatView.frame.width, 150 )
+        sendButton.frame = CGRectMake(sendButton.frame.origin.x, 220, self.sendButton.frame.width, self.sendButton.frame.height)
         messageText.frame = CGRectMake(messageText.frame.origin.x,220,self.messageText.frame.width,self.messageText.frame.height);
-        //CGRectMake(<#x: CGFloat#>, <#y: CGFloat#>, <#width: CGFloat#>, <#height: CGFloat#>)
+      
         
         
         UIView.commitAnimations()
@@ -75,7 +76,7 @@ class ViewController3: UIViewController , UITextViewDelegate , NSStreamDelegate{
     }
     
     func keyboardDidHide(notification : NSNotification){
-        println("A disparut"   )
+       // println("A disparut"   )
         
         var x = self.messageText.frame
         x.origin.y = self.view.frame.height
@@ -88,7 +89,7 @@ class ViewController3: UIViewController , UITextViewDelegate , NSStreamDelegate{
         UIView.setAnimationDuration(0.25);
         ChatView.frame = CGRectMake(0, 60, ChatView.frame.width, 300)
         messageText.frame = CGRectMake(0,450,self.messageText.frame.width,self.messageText.frame.height);
-        
+        sendButton.frame = CGRectMake(messageText.frame.width+10, 450, self.sendButton.frame.width, self.sendButton.frame.height)
 
         [UIView.commitAnimations];
 
@@ -120,7 +121,9 @@ class ViewController3: UIViewController , UITextViewDelegate , NSStreamDelegate{
         self.inputStream.open()
         self.outputStream.open()
         //println("\(UsernameField.text)");
-        var msg = "iam:\(self.nameofSender).thirdView\r\n"
+        var msg = "iam:"
+        msg += "\(self.nameofSender)"
+        msg += ".thirdView\r\n"
         //println("\(msg)")
         var ptr = msg.nulTerminatedUTF8
         var res = outputStream.write(msg, maxLength:msg.lengthOfBytesUsingEncoding(NSASCIIStringEncoding))
@@ -144,14 +147,13 @@ class ViewController3: UIViewController , UITextViewDelegate , NSStreamDelegate{
         if (word.containsString(":you")){
            // println("Trimite mesaj")
             var asd = word.componentsSeparatedByString(":")[0] as NSString
-            print("\(asd) este textul")
-            var ceva = asd
-            cell.textLabel.text = asd
-            cell.textLabel.textColor = UIColor.orangeColor()
+            //print("\(asd) este textul")
+            //var ceva = "\(asd) "
+                        cell.textLabel.textColor = UIColor.orangeColor()
             cell.layer.borderWidth = 0.4
             cell.layer.borderColor = UIColor.lightGrayColor().CGColor
             cell.layer.cornerRadius = 8.0
-            
+            cell.textLabel.text =  "mere"
             
         
         }
@@ -166,11 +168,12 @@ class ViewController3: UIViewController , UITextViewDelegate , NSStreamDelegate{
             cell.layer.cornerRadius = 8.0
         }
         if word.containsString("has joined"){
-            return cell
+            
         }
         else{
             
-        cell.textLabel.text = word
+            cell.textLabel.text = word.componentsSeparatedByString(":")[0] as NSString
+
         
         }
         return cell
@@ -205,7 +208,7 @@ class ViewController3: UIViewController , UITextViewDelegate , NSStreamDelegate{
                 var len : Int
                 var buffer : UnsafePointer<uint_fast8_t>!
                 while (inputStream.hasBytesAvailable){
-                    let buffer2=UnsafePointer<UInt8>.alloc(120);
+                    let buffer2=UnsafeMutablePointer<UInt8>.alloc(120);
                     len = inputStream.read(buffer2, maxLength: 120)
                     if(len>0){
                         var output = NSString(bytes: buffer2, length: len, encoding: NSASCIIStringEncoding)
@@ -272,9 +275,36 @@ class ViewController3: UIViewController , UITextViewDelegate , NSStreamDelegate{
            else{
                 var partOfIt = msg.componentsSeparatedByString("\n")[1].componentsSeparatedByString(":")[6] as NSString
                 var tuple = (partOfIt,fromuser)
-                messagefrom.append(tuple)
+               // messagefrom.append(tuple)
+               //BRO DO SOMETHING ABOUT THIS IMMUTABLE THING RIGHT HERE-12.08.2014
+               //println("Deschide un view nou")
                 
-               println("Deschide un view nou")
+                
+                var banner : ALAlertBanner
+                //banner = ALAlertBanner(forView: self.view, style: ALAlertBannerStyleSuccess, position: ALAlertBannerPositionTop, title: "Success",subtitle:"Ce mai faci",tappedBlock:
+                
+               
+                //daca apasa ar trebui sa afisezi un alt view
+                banner = ALAlertBanner(forView: self.view, style: ALAlertBannerStyleSuccess, position: ALAlertBannerPositionTop, title: "Message from \(fromuser) : ",subtitle: partOfIt , tappedBlock:{ (banner :ALAlertBanner!) in
+                    var ChatView    : ViewController3
+                    //nu lasa asa pune sa afiseze ceview vri tu
+            
+                    ChatView = self.storyboard.instantiateViewControllerWithIdentifier("ChatView") as ViewController3
+                    ChatView.nameofReceiver = fromuser
+                    ChatView.nameofSender = self.nameofSender
+                    self.presentViewController(ChatView, animated: true, completion:nil)
+                    self.viewWillDisappear(true)
+                    self.inputStream.close()
+                    self.outputStream.close()
+                })
+                
+                banner.exclusiveTouch = true
+                //)
+                //println("YOU HAVE TAPPED IT")
+                
+                banner.show()
+            
+                
            }
         }
         else{
@@ -284,22 +314,22 @@ class ViewController3: UIViewController , UITextViewDelegate , NSStreamDelegate{
         
     }
     
-    // var timer : NSTimer
-    //timer = NSTimer(timeInterval: 10, target: self, selector: "getMessages:", userInfo: nil, repeats: true)
-//NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:10 target:self selector:@selector(yourMethod) userInfo:nil repeats:YES];
-    func getMessages(){
-        var msg = self.messageText.text as String!
-        var uname = self.nameofSender as String!
-        var hname = self.nameofReceiver as String!
-       // println("Se apeleaza")
-        var response = "messages:bla"
-        var res : Int
-        
-        self.outputStream.write(response, maxLength :response.lengthOfBytesUsingEncoding(NSASCIIStringEncoding))
-        
     
-    }
+    
+
+    
+    
+    
+    @IBAction func goBack (sender : UIButton!){
+        var UsersView    : ViewController2
  
+        
+        UsersView = self.storyboard.instantiateViewControllerWithIdentifier("SecondView") as ViewController2
+        
+        //self.presentViewController(UsersView, animated: true, completion:nil)
+        
+
+    }
     
     @IBAction func sendMessage(sender: UIButton!){
         
@@ -313,35 +343,10 @@ class ViewController3: UIViewController , UITextViewDelegate , NSStreamDelegate{
                     response += hname!
                         response += ":" + msg
         var res : Int
-        var timer : NSTimer
-        timer = NSTimer(timeInterval: 0.2, target: self, selector: "getMessages:", userInfo: nil, repeats: true)
-
         self.outputStream.write(response, maxLength :response.lengthOfBytesUsingEncoding(NSASCIIStringEncoding))
+        
+        self.messageText.text = ""
     }
-    
-    
-  
-    
-//    
-//    -  (CGSize) calculateLabelHeightWith:(CGFloat)width text:(NSString*)textString
-//    {
-//    CGSize maximumSize = CGSizeMake(width, 9999);
-//    CGSize size = [textString sizeWithFont:[UIFont fontWithName:@"HelveticaNeue-Medium" size:14]
-//    constrainedToSize:maximumSize
-//    lineBreakMode:UILineBreakModeWordWrap];
-//    return size;
-//    }
-//    use table cell height delegate method
-//    
-//    -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-//    {
-//    //Get String for corresponding Row
-//    NSString *stringObject=fullText;
-//    //here i ave taken row width 320
-//    CGSize rowSize=[Utils calculateLabelHeightWith:320 text:stringObject];
-//    
-//    return (rowSize.height+20);
-//    }
     
     
 }
