@@ -293,10 +293,12 @@ class ViewController3: UIViewController , UITextViewDelegate , NSStreamDelegate{
                     ChatView = self.storyboard.instantiateViewControllerWithIdentifier("ChatView") as ViewController3
                     ChatView.nameofReceiver = fromuser
                     ChatView.nameofSender = self.nameofSender
-                    self.presentViewController(ChatView, animated: true, completion:nil)
-                    self.viewWillDisappear(true)
+                    
+                    
                     self.inputStream.close()
                     self.outputStream.close()
+                    self.viewWillDisappear(true)
+                    self.presentViewController(ChatView, animated: true, completion:nil)
                 })
                 
                 banner.exclusiveTouch = true
@@ -323,7 +325,7 @@ class ViewController3: UIViewController , UITextViewDelegate , NSStreamDelegate{
     
     @IBAction func goBack (sender : UIButton!){
         var UsersView    : ViewController2
- 
+        //MAMA EI D EORDINE D ECACAT
         
         UsersView = self.storyboard.instantiateViewControllerWithIdentifier("SecondView") as ViewController2
         UsersView.name = self.nameofSender
